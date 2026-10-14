@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beni Affeder Misin?</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .image-container {
+            width: 220px;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.2;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 8px;
+            position: relative;
+            min-height: 50px;
+        }
+
+        button {
+            padding: 12px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        .btn-yes {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background-color: #059669;
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background-color: #ef4444;
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-no.evade {
+            position: fixed;
+            transition: all 0.1s ease-out;
+        }
+
+        .success-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .success-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #10b981;
+            line-height: 1.4;
+        }
+
+        .heart-icon {
+            font-size: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="mainCard">
+        <div class="image-container">
+            <img src="ela-kalp.png" alt="Ela Kalp">
+        </div>
+
+        <h1>Beni affeder misin?</h1>
+
+        <div class="btn-group">
+            <button class="btn-yes" id="btnYes">Evet</button>
+            <button class="btn-no" id="btnNo">Hayır</button>
+        </div>
+    </div>
+
+    <div class="card success-message" id="successCard">
+        <div class="heart-icon">❤️</div>
+        <div class="success-text">affettiğin için teşekkür ederim iyi varsın</div>
+    </div>
+
+    <script>
+        const btnNo = document.getElementById('btnNo');
+        const btnYes = document.getElementById('btnYes');
+        const mainCard = document.getElementById('mainCard');
+        const successCard = document.getElementById('successCard');
+
+        let isEvading = false;
+
+        function moveButton() {
+            if (!isEvading) {
+                const rect = btnNo.getBoundingClientRect();
+                btnNo.classList.add('evade');
+                btnNo.style.left = rect.left + 'px';
+                btnNo.style.top = rect.top + 'px';
+                isEvading = true;
+            }
+
+            const padding = 20;
+            const btnWidth = btnNo.offsetWidth;
+            const btnHeight = btnNo.offsetHeight;
+
+            const maxX = window.innerWidth - btnWidth - padding;
+            const maxY = window.innerHeight - btnHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            btnNo.style.left = randomX + 'px';
+            btnNo.style.top = randomY + 'px';
+        }
+
+        btnNo.addEventListener('mouseover', moveButton);
+        btnNo.addEventListener('click', moveButton);
+        btnNo.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveButton();
+        });
+
+        btnYes.addEventListener('click', function() {
+            mainCard.style.display = 'none';
+            if (isEvading) {
+                btnNo.style.display = 'none';
+            }
+            successCard.style.display = 'flex';
+        });
+    </script>
+</body>
+</html>
